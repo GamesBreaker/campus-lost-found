@@ -72,11 +72,11 @@ function showFormError(element, message) {
 }
 
 function kindLabel(kind) {
-  return kind === "lost" ? "丢失者" : "捡到者";
+  return kind === "lost" ? "失主" : "捡到者";
 }
 
 function ownKindLabel(kind) {
-  return kind === "lost" ? "我的丢失信息" : "我的拾获信息";
+  return kind === "lost" ? "我的丢失信息" : "我的捡到信息";
 }
 
 function formatSimilarity(value) {
@@ -130,7 +130,7 @@ async function loadHome() {
   foundCount.textContent = "加载中";
   matchCount.textContent = "加载中";
   lostList.replaceChildren(makeElement("div", "empty-card", "正在读取丢失信息…"));
-  foundList.replaceChildren(makeElement("div", "empty-card", "正在读取拾获信息…"));
+  foundList.replaceChildren(makeElement("div", "empty-card", "正在读取捡到信息…"));
   matchPanel.replaceChildren(makeElement("div", "empty-card", "正在读取匹配…"));
 
   try {
@@ -173,7 +173,7 @@ function renderAuthActions() {
 
 function renderBoard(lostPosts, foundPosts) {
   renderPostList(lostList, lostCount, lostPosts, "还没有丢失信息。");
-  renderPostList(foundList, foundCount, foundPosts, "还没有拾获信息。");
+  renderPostList(foundList, foundCount, foundPosts, "还没有捡到信息。");
 }
 
 function renderPostList(container, counter, posts, emptyText) {
@@ -315,7 +315,7 @@ function openPublish(kind) {
   hideFormError(publishError);
   publishKindBadge.textContent = kind === "lost" ? "丢失" : "捡到";
   publishKindBadge.classList.toggle("found", kind === "found");
-  publishTitle.textContent = kind === "lost" ? "发布丢失信息" : "发布拾获信息";
+  publishTitle.textContent = kind === "lost" ? "发布丢失信息" : "发布捡到信息";
   showView("publish");
   document.getElementById("publish-description").focus();
 }

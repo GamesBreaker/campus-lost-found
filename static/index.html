@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f7fb">
+  <title>校园失物招领</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <p class="eyebrow">校园失物招领</p>
+        <h1>让描述自己找到主人</h1>
+      </div>
+      <div class="auth-actions" id="auth-actions">
+        <button class="ghost-button" id="show-auth" type="button">登录 / 注册</button>
+      </div>
+    </header>
+
+    <p class="global-message" id="app-message" role="status" hidden></p>
+
+    <main>
+      <section class="view" id="view-home">
+        <div class="home-intro">
+          <div>
+            <p class="lead">所有人可以查看公开信息；登录后可以发布、查看自己的 70% 以上语义匹配和联系方式。</p>
+          </div>
+          <div class="action-grid">
+            <button class="action-card action-lost" type="button" data-kind="lost">
+              <span class="action-mark">丢</span>
+              <strong>我丢了</strong>
+              <small>发布丢失信息</small>
+            </button>
+            <button class="action-card action-found" type="button" data-kind="found">
+              <span class="action-mark">捡</span>
+              <strong>我捡到</strong>
+              <small>发布拾获信息</small>
+            </button>
+          </div>
+        </div>
+
+        <div class="board-grid">
+          <section class="board-column">
+            <header class="column-heading">
+              <div>
+                <p class="column-kicker">左侧公开信息</p>
+                <h2>想找的信息</h2>
+              </div>
+              <span class="count-pill" id="lost-count">加载中</span>
+            </header>
+            <div class="stack" id="lost-list" aria-live="polite"></div>
+          </section>
+
+          <section class="board-column center-column">
+            <header class="column-heading">
+              <div>
+                <p class="column-kicker">本人发布</p>
+                <h2>匹配信息</h2>
+              </div>
+              <span class="count-pill" id="match-count">—</span>
+            </header>
+            <div class="login-prompt" id="center-login-prompt" hidden>
+              <p>登录后查看与自己发布物品达到 70% 以上的匹配。</p>
+              <button class="secondary-button" id="center-login-button" type="button">登录 / 注册</button>
+            </div>
+            <div class="stack" id="match-panel" aria-live="polite"></div>
+          </section>
+
+          <section class="board-column">
+            <header class="column-heading">
+              <div>
+                <p class="column-kicker">右侧公开信息</p>
+                <h2>找到的信息</h2>
+              </div>
+              <span class="count-pill" id="found-count">加载中</span>
+            </header>
+            <div class="stack" id="found-list" aria-live="polite"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="view" id="view-publish" hidden>
+        <div class="form-heading">
+          <span class="kind-badge" id="publish-kind-badge"></span>
+          <div>
+            <h2 id="publish-title"></h2>
+            <p>发布后会直接回到主界面，并在中间显示匹配。</p>
+          </div>
+        </div>
+
+        <form id="publish-form" novalidate>
+          <label class="field">
+            <span>物品描述 <b>必填</b></span>
+            <textarea id="publish-description" rows="4" maxlength="200" required placeholder="例如：蓝色保温杯，400ml，杯盖有划痕"></textarea>
+            <small>写颜色、材质、品牌、特征和周围环境，不必刻意用关键词。</small>
+          </label>
+
+          <label class="field">
+            <span>地点</span>
+            <input id="publish-location" maxlength="100" placeholder="例如：图书馆三楼">
+          </label>
+
+          <label class="field">
+            <span>时间</span>
+            <input id="publish-happened-at" type="datetime-local">
+          </label>
+
+          <label class="field">
+            <span>联系方式 <b>必填</b></span>
+            <input id="publish-contact" maxlength="120" required placeholder="例如：手机号、微信号">
+            <small>只有匹配成功并点击“匹配”后才会显示给双方。</small>
+          </label>
+
+          <p class="form-error" id="publish-error" role="alert" hidden></p>
+          <button class="primary-button" id="publish-submit" type="submit">发布并匹配</button>
+          <button class="text-button" id="publish-cancel" type="button">取消并返回主界面</button>
+        </form>
+      </section>
+
+      <section class="view" id="view-auth" hidden>
+        <div class="form-heading">
+          <span class="kind-badge auth-badge">账户</span>
+          <div>
+            <h2>登录后继续</h2>
+            <p>使用用户名和密码登录，或创建一个新账号。</p>
+          </div>
+        </div>
+
+        <div class="auth-tabs" role="tablist">
+          <button class="auth-tab active" id="auth-tab-login" type="button" role="tab">登录</button>
+          <button class="auth-tab" id="auth-tab-register" type="button" role="tab">注册</button>
+        </div>
+
+        <p class="form-error" id="auth-error" role="alert" hidden></p>
+
+        <form class="auth-form" id="login-form" novalidate>
+          <label class="field">
+            <span>用户名</span>
+            <input id="login-username" maxlength="20" autocomplete="username" required>
+          </label>
+          <label class="field">
+            <span>密码</span>
+            <input id="login-password" type="password" maxlength="128" autocomplete="current-password" required>
+          </label>
+          <button class="primary-button" id="login-submit" type="submit">登录</button>
+        </form>
+
+        <form class="auth-form" id="register-form" hidden novalidate>
+          <label class="field">
+            <span>用户名</span>
+            <input id="register-username" maxlength="20" autocomplete="username" required>
+            <small>3-20 位，只能包含中文、字母、数字和下划线。</small>
+          </label>
+          <label class="field">
+            <span>密码</span>
+            <input id="register-password" type="password" maxlength="128" autocomplete="new-password" required>
+            <small>至少 8 个字符。</small>
+          </label>
+          <label class="field">
+            <span>确认密码</span>
+            <input id="register-confirm" type="password" maxlength="128" autocomplete="new-password" required>
+          </label>
+          <button class="primary-button" id="register-submit" type="submit">注册并登录</button>
+        </form>
+
+        <button class="text-button" id="auth-cancel" type="button">返回主界面</button>
+      </section>
+    </main>
+
+    <footer>文字语义匹配 · 70% 阈值 · 模拟数据演示</footer>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <script src="/app.js"></script>
+</body>
+</html>
